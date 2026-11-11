@@ -1,0 +1,122 @@
+name: vape-coach
+version: 0.2.0
+manifest_version: 2
+api_version: 1
+requires_hermes: ">=0.23.0"
+license: MIT
+author: Neelanjan Mitra
+kind: standalone
+platforms:
+  - windows
+  - macos
+  - linux
+tags: [health, habits, webcam, desktop, hackathon]
+description: >-
+  Local-first vape tracker and taper coach. A webcam watcher (MediaPipe Pose lite at 2 fps idle,
+  Face+Hand landmarkers at ~12 fps only while a hand is near your face) detects hand-to-mouth puffs
+  plus the exhale and logs them. After a 1-day observe-only baseline the target gap between vaping
+  sessions grows ~10%/day; hitting early climbs a nudge ladder: a roast, a sarcastic (never real)
+  PR threat, a protein-shake order, then jumping jacks that the same watcher counts on camera by
+  itself (no command to run). Nag-only: it never blocks a request, never gates a tool, and has no
+  tool that can modify code. Desktop half: pet-bubble/toast roasts, a status-bar countdown, and a
+  coach pane with a camera Start/Stop button and a live rep counter.
+  Disclosure: the webcam is on only while the watcher runs, i.e. after the user clicks Start camera
+  in the Vape Coach pane (the plugin's dashboard backend then starts `python -m vapecoach.cli watch`
+  as a child process; Stop camera ends it) or while `hermes vape watch` / `hermes vape reps` runs in
+  their terminal. Frames are processed in memory and never written to disk or sent anywhere (the
+  only exception is `--debug-out` on a replay of the user's own video file). Only timestamps,
+  confidence scores and counters are stored, in <hermes home>/plugin-data/vape-coach/data.db (plus
+  the watcher's text log, watcher.log). The first watcher start (or `hermes vape setup`) downloads
+  three MediaPipe .task models from storage.googleapis.com/mediapipe-models and verifies pinned
+  SHA256 hashes. The Desktop half polls the plugin's own local API every 3 s while enabled. No other
+  network calls, no LLM calls, no credentials, no telemetry, no self-updating.
+provides_tools:
+  - vape_status
+  - vape_log_hit
+  - vape_stats
+provides_hooks:
+  - pre_llm_call
+  - post_llm_call
+  - on_session_start
+python_dependencies:
+  - "mediapipe>=1.0,<2"
+  - "opencv-contrib-python>=4.9,<6"
+  - "numpy>=1.26,<3"
+config_schema:
+  exercise:
+    type: str
+    default: jumping_jacks
+    choices: [jumping_jacks, squats, pushups]
+    label: Penalty exercise
+    description: Camera-counted exercise for challenges (jumping jacks works from a desk webcam if you step back).
+  gate_mode:
+    type: str
+    default: nag
+    choices: [nag, off]
+    label: Nagging
+    description: "nag = owed challenges and fresh roasts ride along with your next message so the agent can tease you. Never blocks."
+  delivery:
+    type: str
+    default: auto
+    choices: [auto, desktop, post, context, none]
+    label: Where roasts appear
+    description: auto = Desktop pet/pane plus a chat message after the agent's next reply.
+  baseline_hours:
+    type: float
+    default: 24
+    label: Baseline (hours)
+    description: Observe-only window before coaching starts.
+  gap_growth_per_day:
+    type: float
+    default: 0.1
+    label: Daily gap growth
+    description: Target gap between sessions grows by this fraction each day (0.1 = 10%).
+  session_gap_s:
+    type: float
+    default: 300
+    label: Session merge window (s)
+    description: Puffs closer together than this count as one vaping session.
+  reps_base:
+    type: int
+    default: 15
+    label: Base reps
+  reps_step:
+    type: int
+    default: 10
+    label: Extra reps per escalation
+  reps_max:
+    type: int
+    default: 60
+    label: Max reps
+  verify_reps_with_camera:
+    type: bool
+    default: true
+    label: Count reps on camera
+    description: "On = owed reps are counted by the camera watcher automatically. Off = honor system (Done button, /vape done)."
+  interventions:
+    type: list
+    default: [exercise, pr_threat, protein_shake, meme]
+    label: Enabled nudges
+  camera_index:
+    type: int
+    default: 0
+    label: Camera index
+  camera_backend:
+    type: str
+    default: auto
+    choices: [auto, dshow, msmf, avfoundation, v4l2, any]
+    label: Camera backend
+    description: Windows auto tries DirectShow then Media Foundation.
+  idle_fps:
+    type: float
+    default: 2
+    label: Idle fps (Pose only)
+  active_fps:
+    type: float
+    default: 12
+    label: Active fps (Pose+Face+Hand)
+  model_variant:
+    type: str
+    default: lite
+    choices: [lite, full]
+    label: Pose model

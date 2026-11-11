@@ -1,0 +1,9 @@
+{
+  "name": "vape-coach",
+  "label": "Vape Coach",
+  "description": "Local-first vape tracker and taper coach (backend for the Desktop half).",
+  "icon": "Activity",
+  "version": "0.1.0",
+  "tab": { "path": "/vape-coach", "hidden": true },
+  "api": "plugin_api.py"
+}

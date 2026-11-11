@@ -1,0 +1,10 @@
+clip,start_s,end_s,type,notes
+# start_s = hand reaches the mouth; end_s = exhale finished (or hand back down if no visible exhale)
+# types: hit, stealth_hit, sip, chin, snack, phone, scratch, other
+vc_01_desk_day_hits.mp4,12.0,16.5,hit,normal hit + visible exhale
+vc_01_desk_day_hits.mp4,48.2,51.0,stealth_hit,exhaled down/away, no cloud
+vc_01_desk_day_hits.mp4,80.0,83.5,sip,coffee mug
+vc_02_desk_day_lookalikes.mp4,5.0,25.0,chin,hand on chin while reading
+vc_02_desk_day_lookalikes.mp4,40.0,41.0,scratch,scratched nose
+vc_02_desk_day_lookalikes.mp4,60.0,66.0,snack,chips
+vc_02_desk_day_lookalikes.mp4,90.0,120.0,phone,phone call held to ear

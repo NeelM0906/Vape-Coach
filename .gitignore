@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+*.task
+*.mp4
+!docs/demo.mp4
+*.mov
+*.avi
+eval/preds/
+eval/*.json
+!eval/labels_template.csv
+eval/clips/
+*.MOV
+*.mov
+*.zip
+eval/synthetic/
