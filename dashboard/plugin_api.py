@@ -41,6 +41,7 @@ def _load_core():
 
 
 _load_core()
+from vape_coach_core.childenv import watcher_env  # noqa: E402
 from vape_coach_core.coach import Coach  # noqa: E402
 from vape_coach_core.config import load_settings  # noqa: E402
 from vape_coach_core.interventions import MEMES, PR_THREATS, SHAKES  # noqa: E402
@@ -136,7 +137,7 @@ async def camera_start():
         return {"ok": True, "camera": cam}
     root = Path(__file__).resolve().parent.parent
     log_path = c.store.path.parent / "watcher.log"
-    env = dict(os.environ, VAPE_COACH_DB=str(c.store.path), PYTHONUNBUFFERED="1")
+    env = watcher_env(str(c.store.path))  # allowlisted: no provider keys reach the camera process
     kw: dict = {}
     if os.name == "nt":
         kw["creationflags"] = getattr(subprocess, "CREATE_NO_WINDOW", 0x08000000)

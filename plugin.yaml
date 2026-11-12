@@ -1,5 +1,5 @@
 name: vape-coach
-version: 0.2.0
+version: 0.2.1
 manifest_version: 2
 api_version: 1
 requires_hermes: ">=0.23.0"
@@ -22,7 +22,8 @@ description: >-
   coach pane with a camera Start/Stop button and a live rep counter.
   Disclosure: the webcam is on only while the watcher runs, i.e. after the user clicks Start camera
   in the Vape Coach pane (the plugin's dashboard backend then starts `python -m vapecoach.cli watch`
-  as a child process; Stop camera ends it) or while `hermes vape watch` / `hermes vape reps` runs in
+  as a child process with a minimal, allowlisted environment that carries no provider keys; Stop
+  camera ends it) or while `hermes vape watch` / `hermes vape reps` runs in
   their terminal. Frames are processed in memory and never written to disk or sent anywhere (the
   only exception is `--debug-out` on a replay of the user's own video file). Only timestamps,
   confidence scores and counters are stored, in <hermes home>/plugin-data/vape-coach/data.db (plus

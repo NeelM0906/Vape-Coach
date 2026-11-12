@@ -177,7 +177,8 @@ recordings, see [`eval/RECORDING_GUIDE.md`](eval/RECORDING_GUIDE.md).
 ## Privacy and what it touches
 
 - **Camera:** on only while the watcher runs. That's after you click **Start camera** (the plugin's
-  backend then runs `python -m vapecoach.cli watch` as a child process) or while `hermes vape watch`
+  backend then runs `python -m vapecoach.cli watch` as a child process, with a minimal allowlisted
+  environment that carries none of Hermes' provider keys) or while `hermes vape watch`
   runs in your terminal. **Stop camera** or Ctrl+C turns it off, and the pane always shows the
   camera's state.
 - **Frames:** processed in memory, never written to disk, never sent anywhere. The one exception is
@@ -194,7 +195,7 @@ recordings, see [`eval/RECORDING_GUIDE.md`](eval/RECORDING_GUIDE.md).
 ## Development
 
 ```bash
-python -m pytest                          # 66 tests: detector, reps, auto-reps, taper, coach, glue, Desktop contract
+python -m pytest                          # 69 tests: detector, reps, auto-reps, taper, coach, glue, Desktop contract
 hermes plugins validate . --install-deps
 ```
 
